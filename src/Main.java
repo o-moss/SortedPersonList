@@ -19,8 +19,18 @@ public class Main {
         listOfPersons.add(person6);
         listOfPersons.add(person7);
         listOfPersons.add(person8);
-        Comparator personComparator = new PersonComparator(3);
-        Collections.sort(listOfPersons, personComparator);
+        Comparator<Person> personComparatorLambda = (Person o1, Person o2) -> {
+            int maxWords = 3;
+            String[] surnameParts1 = o1.getSurname().split("\\P{IsAlphabetic}+");
+            String[] surnameParts2 = o2.getSurname().split("\\P{IsAlphabetic}+");
+            if (surnameParts1.length > maxWords & surnameParts2.length > maxWords) {
+                return Integer.compare(o1.getAge(), o2.getAge());
+            } else {
+                int compareBySurname = Integer.compare(surnameParts1.length, surnameParts2.length);
+                return compareBySurname == 0 ? Integer.compare(o1.getAge(), o2.getAge()) : compareBySurname;
+            }
+        };
+        Collections.sort(listOfPersons, personComparatorLambda);
         System.out.println(listOfPersons);
     }
 }
